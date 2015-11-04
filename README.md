@@ -1,2 +1,46 @@
 # go-types
-Golang types utils libraty
+Golang simple types convertion library, useful for
+json types cast or GET data convert 
+
+## Documentation
+[Docs on godoc.org](https://godoc.org/github.com/mirrr/types)
+
+## How to use
+
+```golang
+package main
+
+import (
+    "github.com/mirrr/types"
+    "fmt"
+    "reflect"
+)
+
+func main() {
+    a, b, c := "8", 1, 1.04
+    a2, b2, c2 := types.Rune(a), types.Float64(b), types.String(c)
+
+    fmt.Println(a2, b2, c2)
+    fmt.Println(reflect.TypeOf(a2), reflect.TypeOf(b2), reflect.TypeOf(c2))
+}
+
+// out :
+// 8 1 1.04
+// int32 float64 string
+```
+
+## License
+DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+Version 2, December 2004
+
+Copyright (C) 2015 Oleksiy Chechel <alex.mirrr@gmail.com>
+
+Everyone is permitted to copy and distribute verbatim or modified
+copies of this license document, and changing it is allowed as long
+as the name is changed.
+
+DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+ 0. You just DO WHAT THE FUCK YOU WANT TO.
+
