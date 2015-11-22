@@ -20,6 +20,10 @@ type (
 
 // String convert interface{} type to string if posible
 func String(s interface{}) (r string) {
+	if s == nil {
+		r = ""
+		return
+	}
 	switch v := s.(type) {
 	case string:
 		r = v
