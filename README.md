@@ -1,6 +1,5 @@
 # go-types
-Golang simple types convertion library, useful for
-json types cast or GET data convert 
+Golang library for safe `interface{} to base types` convertion.
 
 ## Documentation
 [Docs on godoc.org](https://godoc.org/github.com/mirrr/types)
