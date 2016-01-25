@@ -1,8 +1,12 @@
 # go-types
 Golang library for safe `interface{} to base types` convertion.
 
+## Install
+
+go get gopkg.in/mirrr/types.v1
+
 ## Documentation
-[Docs on godoc.org](https://godoc.org/github.com/mirrr/types)
+[Docs on godoc.org](https://godoc.org/gopkg.in/mirrr/types.v1)
 
 ## How to use
 
@@ -10,7 +14,7 @@ Golang library for safe `interface{} to base types` convertion.
 package main
 
 import (
-    "github.com/mirrr/types"
+    "gopkg.in/mirrr/types.v1"
     "fmt"
     "reflect"
 )
