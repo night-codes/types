@@ -46,7 +46,7 @@ func Int(s interface{}) (r int) {
 
 // Bool convert to bool
 func Bool(s interface{}) (r bool) {
-	r, _ := strconv.ParseBool(String(s))
+	r, _ = strconv.ParseBool(String(s))
 	return
 }
 
