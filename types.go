@@ -44,6 +44,12 @@ func Int(s interface{}) (r int) {
 	return
 }
 
+// Bool convert to bool
+func Bool(s interface{}) (r bool) {
+	r, _ := strconv.ParseBool(String(s))
+	return
+}
+
 // Int8 convert to int8
 func Int8(s interface{}) (r int8) {
 	tmpr, _ := strconv.ParseInt(String(s), 0, 64)
@@ -121,6 +127,45 @@ func Float32(s interface{}) (r float32) {
 func Float64(s interface{}) (r float64) {
 	r, _ = strconv.ParseFloat(String(s), 64)
 	return
+}
+
+// Map convert to map[string]interface{}
+func Map(iface ...interface{}) (ret map[string]interface{}) {
+	ret = map[string]interface{}{}
+	if len(iface) == 0 || iface[0] == nil {
+		return
+	}
+	t := iface[0]
+	val := reflect.ValueOf(t)
+	if IsPtr(t) {
+		val = val.Elem()
+	}
+	if val.Kind().String() != "map" {
+		return
+	}
+	val = val.Convert(reflect.TypeOf(map[string]interface{}{}))
+	i := val.Interface()
+	ret = i.(map[string]interface{})
+	return
+}
+
+// MGet getting data from deep interface{} map by path
+func MGet(obj interface{}, path ...interface{}) interface{} {
+	if len(path) != 0 {
+		if m, ok := Map(obj)[String(path[0])]; ok {
+			if len(path) == 1 {
+				return m
+			}
+			return MGet(m, path[1:]...)
+		}
+		return nil
+	}
+	return Map(obj)
+}
+
+// IsPtr detect pointer type
+func IsPtr(s interface{}) bool {
+	return reflect.TypeOf(s).String()[0] == '*'
 }
 
 // IsNumber check type conformity
