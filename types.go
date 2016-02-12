@@ -18,7 +18,7 @@ type (
 	Mixed interface{}
 )
 
-// String convert interface{} type to string if posible
+// String convert interface{} type to string if it posible
 func String(s interface{}) (r string) {
 	if s == nil {
 		r = ""
@@ -37,93 +37,100 @@ func String(s interface{}) (r string) {
 	return
 }
 
-// Int convert to int
+// Int converting
 func Int(s interface{}) (r int) {
 	tmpr, _ := strconv.ParseInt(String(s), 0, 64)
 	r = int(tmpr)
 	return
 }
 
-// Bool convert to bool
+// Bool converting
 func Bool(s interface{}) (r bool) {
 	r, _ = strconv.ParseBool(String(s))
 	return
 }
 
-// Int8 convert to int8
+// Int8 converting
 func Int8(s interface{}) (r int8) {
 	tmpr, _ := strconv.ParseInt(String(s), 0, 64)
 	r = int8(tmpr)
 	return
 }
 
-// Int16 convert to int16
+// Int16 converting
 func Int16(s interface{}) (r int16) {
 	tmpr, _ := strconv.ParseInt(String(s), 0, 64)
 	r = int16(tmpr)
 	return
 }
 
-// Int32 convert to int32
+// Int32 converting
 func Int32(s interface{}) (r int32) {
 	tmpr, _ := strconv.ParseInt(String(s), 0, 64)
 	r = int32(tmpr)
 	return
 }
 
-// Rune convert to rune (int32)
+// Rune converting to rune (int32)
 func Rune(s interface{}) (r rune) {
 	r = Int32(s)
 	return
 }
 
-// Int64 convert to int64
+// Int64 converting
 func Int64(s interface{}) (r int64) {
 	r, _ = strconv.ParseInt(String(s), 0, 64)
 	return
 }
 
-// Byte convert to int8
+// Byte converting
 func Byte(s interface{}) (r byte) {
 	tmpr, _ := strconv.ParseUint(String(s), 0, 64)
 	r = byte(tmpr)
 	return
 }
 
-// Uint8 convert to uint8
+// Uint converting
+func Uint(s interface{}) (r uint) {
+	tmpr, _ := strconv.ParseUint(String(s), 0, 64)
+	r = uint(tmpr)
+	return
+}
+
+// Uint8 converting
 func Uint8(s interface{}) (r uint8) {
 	r = Byte(s)
 	return
 }
 
-// Uint16 convert to uint16
+// Uint16 converting
 func Uint16(s interface{}) (r uint16) {
 	tmpr, _ := strconv.ParseUint(String(s), 0, 64)
 	r = uint16(tmpr)
 	return
 }
 
-// Uint32 convert to uint32
+// Uint32 converting
 func Uint32(s interface{}) (r uint32) {
 	tmpr, _ := strconv.ParseUint(String(s), 0, 64)
 	r = uint32(tmpr)
 	return
 }
 
-// Uint64 convert to uint64
+// Uint64 converting
 func Uint64(s interface{}) (r uint64) {
 	r, _ = strconv.ParseUint(String(s), 0, 64)
 	return
 }
 
-// Float32 convert to float32
+// Float32 converting
 func Float32(s interface{}) (r float32) {
 	tmpr, _ := strconv.ParseFloat(String(s), 64)
 	r = float32(tmpr)
 	return
 }
 
-// Float64 convert to float64
+// Float64 converting
 func Float64(s interface{}) (r float64) {
 	r, _ = strconv.ParseFloat(String(s), 64)
 	return
@@ -168,7 +175,7 @@ func IsPtr(s interface{}) bool {
 	return reflect.TypeOf(s).String()[0] == '*'
 }
 
-// IsNumber check type conformity
+// IsNumber check number type conformity
 func IsNumber(s interface{}) bool {
 	switch s.(type) {
 	case int:
@@ -200,7 +207,27 @@ func IsNumber(s interface{}) bool {
 	}
 }
 
-// TypeName return name of type
-func TypeName(s interface{}) string {
-	return fmt.Sprintf("%v", reflect.TypeOf(s))
+// TypeName return name of variable type
+func TypeName(v interface{}) string {
+	return fmt.Sprintf("%v", reflect.TypeOf(v))
+}
+
+// Kind return variable kind
+func Kind(v interface{}) string {
+	val := reflect.ValueOf(v)
+	if IsPtr(v) {
+		val = val.Elem()
+	}
+	return val.Kind().String()
+}
+
+// Expected return conformity variable type to expected types
+func Expected(v interface{}, types []string) bool {
+	tp := TypeName(v)
+	for _, value := range types {
+		if tp == value {
+			return true
+		}
+	}
+	return false
 }
