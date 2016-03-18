@@ -156,6 +156,28 @@ func Map(iface ...interface{}) (ret map[string]interface{}) {
 	return
 }
 
+// Slice convert to []interface{}
+func Slice(iface ...interface{}) (ret []interface{}) {
+	ret = []interface{}{}
+	if len(iface) == 0 || iface[0] == nil {
+		return
+	}
+	t := iface[0]
+	val := reflect.ValueOf(t)
+	if IsPtr(t) {
+		val = val.Elem()
+	}
+	if val.Kind() != reflect.Slice || val.Len() == 0 {
+		return
+	}
+
+	ret = make([]interface{}, val.Len())
+	for i := 0; i < val.Len(); i++ {
+		ret[i] = val.Index(i).Interface()
+	}
+	return
+}
+
 // MGet getting data from deep interface{} map by path
 func MGet(obj interface{}, path ...interface{}) interface{} {
 	if len(path) != 0 {
@@ -167,7 +189,7 @@ func MGet(obj interface{}, path ...interface{}) interface{} {
 		}
 		return nil
 	}
-	return Map(obj)
+	return obj
 }
 
 // IsPtr detect pointer type
