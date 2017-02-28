@@ -39,7 +39,7 @@ func String(s interface{}) (r string) {
 
 // Int converting
 func Int(s interface{}) (r int) {
-	tmpr, _ := strconv.ParseInt(String(s), 0, 64)
+	tmpr, _ := strconv.ParseInt(String(s), 10, 64)
 	r = int(tmpr)
 	return
 }
@@ -52,26 +52,26 @@ func Bool(s interface{}) (r bool) {
 
 // Int8 converting
 func Int8(s interface{}) (r int8) {
-	tmpr, _ := strconv.ParseInt(String(s), 0, 64)
+	tmpr, _ := strconv.ParseInt(String(s), 10, 8)
 	r = int8(tmpr)
 	return
 }
 
 // Int16 converting
 func Int16(s interface{}) (r int16) {
-	tmpr, _ := strconv.ParseInt(String(s), 0, 64)
+	tmpr, _ := strconv.ParseInt(String(s), 10, 16)
 	r = int16(tmpr)
 	return
 }
 
 // Int32 converting
 func Int32(s interface{}) (r int32) {
-	tmpr, _ := strconv.ParseInt(String(s), 0, 64)
+	tmpr, _ := strconv.ParseInt(String(s), 10, 32)
 	r = int32(tmpr)
 	return
 }
 
-// Rune converting to rune (int32)
+// Rune converting (int32)
 func Rune(s interface{}) (r rune) {
 	r = Int32(s)
 	return
@@ -79,20 +79,20 @@ func Rune(s interface{}) (r rune) {
 
 // Int64 converting
 func Int64(s interface{}) (r int64) {
-	r, _ = strconv.ParseInt(String(s), 0, 64)
+	r, _ = strconv.ParseInt(String(s), 10, 64)
 	return
 }
 
 // Byte converting
 func Byte(s interface{}) (r byte) {
-	tmpr, _ := strconv.ParseUint(String(s), 0, 64)
+	tmpr, _ := strconv.ParseUint(String(s), 10, 8)
 	r = byte(tmpr)
 	return
 }
 
 // Uint converting
 func Uint(s interface{}) (r uint) {
-	tmpr, _ := strconv.ParseUint(String(s), 0, 64)
+	tmpr, _ := strconv.ParseUint(String(s), 10, 64)
 	r = uint(tmpr)
 	return
 }
@@ -105,27 +105,27 @@ func Uint8(s interface{}) (r uint8) {
 
 // Uint16 converting
 func Uint16(s interface{}) (r uint16) {
-	tmpr, _ := strconv.ParseUint(String(s), 0, 64)
+	tmpr, _ := strconv.ParseUint(String(s), 10, 16)
 	r = uint16(tmpr)
 	return
 }
 
 // Uint32 converting
 func Uint32(s interface{}) (r uint32) {
-	tmpr, _ := strconv.ParseUint(String(s), 0, 64)
+	tmpr, _ := strconv.ParseUint(String(s), 10, 32)
 	r = uint32(tmpr)
 	return
 }
 
 // Uint64 converting
 func Uint64(s interface{}) (r uint64) {
-	r, _ = strconv.ParseUint(String(s), 0, 64)
+	r, _ = strconv.ParseUint(String(s), 10, 64)
 	return
 }
 
 // Float32 converting
 func Float32(s interface{}) (r float32) {
-	tmpr, _ := strconv.ParseFloat(String(s), 64)
+	tmpr, _ := strconv.ParseFloat(String(s), 32)
 	r = float32(tmpr)
 	return
 }
