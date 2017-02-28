@@ -3,7 +3,7 @@ Golang library for safe `interface{} to base types` convertion.
 
 ## Install
 
-go get gopkg.in/mirrr/types.v1
+go get gopkg.in/night-codes/types.v1
 
 ## Documentation
 [Docs on godoc.org](https://godoc.org/gopkg.in/night-codes/types.v1)
