@@ -6,7 +6,7 @@ Golang library for safe `interface{} to base types` convertion.
 go get gopkg.in/mirrr/types.v1
 
 ## Documentation
-[Docs on godoc.org](https://godoc.org/gopkg.in/mirrr/types.v1)
+[Docs on godoc.org](https://godoc.org/gopkg.in/night-codes/types.v1)
 
 ## How to use
 
@@ -14,7 +14,7 @@ go get gopkg.in/mirrr/types.v1
 package main
 
 import (
-    "gopkg.in/mirrr/types.v1"
+    "gopkg.in/night-codes/types.v1"
     "fmt"
     "reflect"
 )
