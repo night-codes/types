@@ -1,6 +1,7 @@
 package types
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -252,4 +253,34 @@ func Expected(v interface{}, types []string) bool {
 		}
 	}
 	return false
+}
+
+// SetField applies value to struct field
+func SetField(structPtr interface{}, name string, value interface{}) error {
+	structValue := reflect.ValueOf(structPtr).Elem()
+	fieldValue := structValue.FieldByName(name)
+
+	if !fieldValue.IsValid() {
+		return fmt.Errorf("No such field: %s in structPtr", name)
+	}
+
+	if !fieldValue.CanSet() {
+		return fmt.Errorf("Cannot set %s field value", name)
+	}
+
+	fieldType := fieldValue.Type()
+	val := reflect.ValueOf(value)
+	if fieldType != val.Type() && fieldType.Kind() != reflect.Interface {
+		return errors.New("Provided value type didn't match structPtr field type")
+	}
+
+	fieldValue.Set(val)
+	return nil
+}
+
+// ChangeStruct applies map of changes to struct
+func ChangeStruct(structPtr interface{}, changesMap map[string]interface{}) {
+	for k, v := range changesMap {
+		SetField(structPtr, k, v)
+	}
 }
