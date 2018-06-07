@@ -26,12 +26,25 @@ func (s structWithString) String() string {
 
 func BenchmarkTestString(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		strconv.FormatFloat(21312.2134567, 'f', -1, 64)
+		String(21312.2134567)
 	}
 }
-func BenchmarkTestString2(b *testing.B) {
+
+func BenchmarkTestFloat64(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		String(21312.2134567)
+		Float64("21312.2134567")
+	}
+}
+
+func BenchmarkTestStr2Int(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		Int("2134567")
+	}
+}
+
+func BenchmarkTestFloat2Int(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		Int(2134567.123)
 	}
 }
 
@@ -73,6 +86,8 @@ func TestInt(t *testing.T) {
 		arg  interface{}
 		want int
 	}{
+		{"true", true, 0},
+		{"123.12", 123.12, 123},
 		{"string_123", "123", 123},
 		{"-string_123", "-123", -123},
 		{"string_without_num", "abcdef", 0},
@@ -99,6 +114,11 @@ func TestBool(t *testing.T) {
 	}{
 		{"string_true", "true", true},
 		{"string_1", "1", true},
+		{"0", 0, false}, // only 0 == false
+		{"1", 1, true},
+		{"-1", -1, true},
+		{"100", 100, true},
+		{"100.0", 100.0, true},
 		{"string_0", "0", false},
 		{"string_1", "11", false},
 		{"string_with_space", " true", false},
@@ -119,6 +139,8 @@ func TestInt8(t *testing.T) {
 		arg  interface{}
 		want int8
 	}{
+		{"123.12", 123.12, 123},
+		{"-123.12", -123.12, -123},
 		{"string_123", "123", 123},
 		{"-string_123", "-123", -123},
 		{"string_without_num", "abcdef", 0},
@@ -143,6 +165,8 @@ func TestInt16(t *testing.T) {
 		arg  interface{}
 		want int16
 	}{
+		{"123.12", 123.12, 123},
+		{"-123.12", -123.12, -123},
 		{"string_123", "123", 123},
 		{"-string_123", "-123", -123},
 		{"string_without_num", "abcdef", 0},
@@ -167,6 +191,8 @@ func TestInt32(t *testing.T) {
 		arg  interface{}
 		want int32
 	}{
+		{"123.12", 123.12, 123},
+		{"-123.12", -123.12, -123},
 		{"string_123", "123", 123},
 		{"-string_123", "-123", -123},
 		{"string_without_num", "abcdef", 0},
@@ -195,6 +221,8 @@ func TestInt64(t *testing.T) {
 		arg  interface{}
 		want int64
 	}{
+		{"123.12", 123.12, 123},
+		{"-123.12", -123.12, -123},
 		{"string_123", "123", 123},
 		{"-string_123", "-123", -123},
 		{"string_without_num", "abcdef", 0},
@@ -223,6 +251,7 @@ func TestUint(t *testing.T) {
 		arg  interface{}
 		want uint
 	}{
+		{"123.12", 123.12, 123},
 		{"string_123", "12356", 12356},
 		{"-string_123", "-123", 0},
 		{"string_without_num", "abcdef", 0},
@@ -247,6 +276,8 @@ func TestUint8(t *testing.T) {
 		arg  interface{}
 		want uint8
 	}{
+		{"123.12", 123.12, 123},
+		{"-123.12", -103.12, 153}, // overflow
 		{"string_123", "123", 123},
 		{"string_12356", "12356", 255}, // overflow
 		{"-string_123", "-123", 0},
@@ -272,6 +303,8 @@ func TestUint16(t *testing.T) {
 		arg  interface{}
 		want uint16
 	}{
+		{"123.12", 123.12, 123},
+		{"-123.12", -103.12, 65433}, // overflow
 		{"string_123", "123", 123},
 		{"string_123567", "123567", 65535}, // overflow
 		{"-string_123", "-123", 0},
@@ -297,6 +330,8 @@ func TestUint32(t *testing.T) {
 		arg  interface{}
 		want uint32
 	}{
+		{"123.12", 123.12, 123},
+		{"-123.12", -103.12, 4294967193}, // overflow
 		{"string_123", "123", 123},
 		{"string_12345678901", "12345678901", 4294967295}, // overflow
 		{"-string_123", "-123", 0},
@@ -322,6 +357,8 @@ func TestUint64(t *testing.T) {
 		arg  interface{}
 		want uint64
 	}{
+		{"123.12", 123.12, 123},
+		{"-123.12", -103.12, 18446744073709551513}, // overflow
 		{"string_123", "123", 123},
 		{"string_12345678901", "12345678901", 12345678901},
 		{"-string_123", "-123", 0},
@@ -347,6 +384,8 @@ func TestFloat32(t *testing.T) {
 		arg  interface{}
 		want float32
 	}{
+		{"123", 123, 123.0},
+		{"true", true, 0},
 		{"string_123", "123", 123.0},
 		{"-string_123", "-123", -123.0},
 		{"string_12345678901", "12345678901", 12345678901.0},
