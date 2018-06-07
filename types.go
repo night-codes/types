@@ -1,11 +1,13 @@
 package types
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"reflect"
 	"strconv"
 	"strings"
+	"unsafe"
 )
 
 type (
@@ -30,16 +32,42 @@ func String(s interface{}) string {
 	case *string:
 		return *v
 	case []byte:
-		return string(v)
+		return Bytes2String(v)
 	case *[]byte:
-		return string(*v)
+		return Bytes2String(*v)
+	case [][]byte:
+		return Bytes2String(bytes.Join(v, []byte{}))
 	case []string:
 		return strings.Join(v, "")
 	case *[]string:
 		return strings.Join(*v, "")
+	case bool:
+		return strconv.FormatBool(v)
+	case int:
+		return strconv.Itoa(v)
+	case int8:
+		return strconv.FormatInt(int64(v), 10)
+	case int16:
+		return strconv.FormatInt(int64(v), 10)
+	case int32:
+		return strconv.FormatInt(int64(v), 10)
+	case int64:
+		return strconv.FormatInt(v, 10)
+	case uint8:
+		return strconv.FormatUint(uint64(v), 10)
+	case uint16:
+		return strconv.FormatUint(uint64(v), 10)
+	case uint32:
+		return strconv.FormatUint(uint64(v), 10)
+	case uint64:
+		return strconv.FormatUint(v, 10)
+	case float32:
+		return strconv.FormatFloat(float64(v), 'f', -1, 32)
+	case float64:
+		return strconv.FormatFloat(v, 'f', -1, 64)
 	}
 
-	return fmt.Sprintf("%v", s)
+	return fmt.Sprintf("%+v", s)
 }
 
 // Int converting
@@ -69,10 +97,13 @@ func Int(s interface{}) int {
 		return int(v)
 	case float64:
 		return int(v)
+	case string:
+		i, _ := strconv.Atoi(v)
+		return i
 	}
 
-	tmpr, _ := strconv.Atoi(String(s))
-	return tmpr
+	i, _ := strconv.Atoi(String(s))
+	return i
 }
 
 // Bool converting
@@ -104,10 +135,13 @@ func Bool(s interface{}) bool {
 		return v != 0
 	case float64:
 		return v != 0
+	case string:
+		b, _ := strconv.ParseBool(v)
+		return b
 	}
 
-	r, _ := strconv.ParseBool(String(s))
-	return r
+	b, _ := strconv.ParseBool(String(s))
+	return b
 }
 
 // Int8 converting
@@ -137,10 +171,13 @@ func Int8(s interface{}) int8 {
 		return int8(v)
 	case float64:
 		return int8(v)
+	case string:
+		i8, _ := strconv.ParseInt(v, 10, 8)
+		return int8(i8)
 	}
 
-	tmpr, _ := strconv.ParseInt(String(s), 10, 8)
-	return int8(tmpr)
+	i8, _ := strconv.ParseInt(String(s), 10, 8)
+	return int8(i8)
 }
 
 // Int16 converting
@@ -170,11 +207,13 @@ func Int16(s interface{}) int16 {
 		return int16(v)
 	case float64:
 		return int16(v)
+	case string:
+		i16, _ := strconv.ParseInt(v, 10, 16)
+		return int16(i16)
 	}
 
-	tmpr, _ := strconv.ParseInt(String(s), 10, 16)
-	return int16(tmpr)
-
+	i16, _ := strconv.ParseInt(String(s), 10, 16)
+	return int16(i16)
 }
 
 // Int32 converting
@@ -204,10 +243,13 @@ func Int32(s interface{}) int32 {
 		return int32(v)
 	case float64:
 		return int32(v)
+	case string:
+		i32, _ := strconv.ParseInt(v, 10, 32)
+		return int32(i32)
 	}
 
-	tmpr, _ := strconv.ParseInt(String(s), 10, 32)
-	return int32(tmpr)
+	i32, _ := strconv.ParseInt(String(s), 10, 32)
+	return int32(i32)
 }
 
 // Rune converting (int32)
@@ -243,15 +285,18 @@ func Int64(s interface{}) int64 {
 		return int64(v)
 	case float64:
 		return int64(v)
+	case string:
+		i64, _ := strconv.ParseInt(v, 10, 64)
+		return int64(i64)
 	}
 
-	r, _ := strconv.ParseInt(String(s), 10, 64)
-	return r
+	i64, _ := strconv.ParseInt(String(s), 10, 64)
+	return int64(i64)
 }
 
 // Byte converting
 func Byte(s interface{}) byte {
-	return byte(Uint8(s))
+	return Uint8(s)
 }
 
 // Uint converting
@@ -314,10 +359,13 @@ func Uint8(s interface{}) uint8 {
 		return uint8(v)
 	case float64:
 		return uint8(v)
+	case string:
+		u8, _ := strconv.ParseUint(v, 10, 8)
+		return uint8(u8)
 	}
 
-	tmpr, _ := strconv.ParseUint(String(s), 10, 8)
-	return uint8(tmpr)
+	u8, _ := strconv.ParseUint(String(s), 10, 8)
+	return uint8(u8)
 }
 
 // Uint16 converting
@@ -347,10 +395,13 @@ func Uint16(s interface{}) uint16 {
 		return uint16(v)
 	case float64:
 		return uint16(v)
+	case string:
+		u16, _ := strconv.ParseUint(v, 10, 16)
+		return uint16(u16)
 	}
 
-	tmpr, _ := strconv.ParseUint(String(s), 10, 16)
-	return uint16(tmpr)
+	u16, _ := strconv.ParseUint(String(s), 10, 16)
+	return uint16(u16)
 }
 
 // Uint32 converting
@@ -380,10 +431,13 @@ func Uint32(s interface{}) uint32 {
 		return uint32(v)
 	case float64:
 		return uint32(v)
+	case string:
+		u32, _ := strconv.ParseUint(v, 10, 32)
+		return uint32(u32)
 	}
 
-	tmpr, _ := strconv.ParseUint(String(s), 10, 32)
-	return uint32(tmpr)
+	u32, _ := strconv.ParseUint(String(s), 10, 32)
+	return uint32(u32)
 }
 
 // Uint64 converting
@@ -413,10 +467,13 @@ func Uint64(s interface{}) (r uint64) {
 		return uint64(v)
 	case float64:
 		return uint64(v)
+	case string:
+		u64, _ := strconv.ParseUint(v, 10, 64)
+		return uint64(u64)
 	}
 
-	r, _ = strconv.ParseUint(String(s), 10, 64)
-	return
+	u64, _ := strconv.ParseUint(String(s), 10, 64)
+	return uint64(u64)
 }
 
 // Float32 converting
@@ -446,10 +503,13 @@ func Float32(s interface{}) float32 {
 		return float32(v)
 	case float64:
 		return float32(v)
+	case string:
+		f32, _ := strconv.ParseFloat(v, 32)
+		return float32(f32)
 	}
 
-	tmpr, _ := strconv.ParseFloat(String(s), 32)
-	return float32(tmpr)
+	f32, _ := strconv.ParseFloat(String(s), 32)
+	return float32(f32)
 }
 
 // Float64 converting
@@ -479,10 +539,14 @@ func Float64(s interface{}) float64 {
 		return float64(v)
 	case float64:
 		return float64(v)
+
+	case string:
+		f64, _ := strconv.ParseFloat(v, 64)
+		return float64(f64)
 	}
 
-	r, _ := strconv.ParseFloat(String(s), 64)
-	return r
+	f64, _ := strconv.ParseFloat(String(s), 64)
+	return float64(f64)
 }
 
 // Map convert to map[string]interface{}
@@ -605,8 +669,35 @@ func SetField(structPtr interface{}, name string, value interface{}) error {
 }
 
 // ChangeStruct applies map of changes to struct
-func ChangeStruct(structPtr interface{}, changesMap map[string]interface{}) {
+func ChangeStruct(structPtr interface{}, changesMap map[string]interface{}) error {
+	ers := ""
 	for k, v := range changesMap {
-		SetField(structPtr, k, v)
+		if err := SetField(structPtr, k, v); err != nil {
+			ers += err.Error()
+		}
 	}
+	if ers == "" {
+		return nil
+	}
+	return errors.New(ers)
+}
+
+// ChangeStructMust applies map of changes to struct but stops after error
+func ChangeStructMust(structPtr interface{}, changesMap map[string]interface{}) error {
+	for k, v := range changesMap {
+		if err := SetField(structPtr, k, v); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Bytes2String fast convertion use unsafe
+func Bytes2String(bs []byte) string {
+	return *(*string)(unsafe.Pointer(&bs))
+}
+
+// String2Bytes fast convertion use unsafe
+func String2Bytes(str string) []byte {
+	return *(*[]byte)(unsafe.Pointer(&str))
 }
