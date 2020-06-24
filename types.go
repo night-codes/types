@@ -32,11 +32,11 @@ func String(s interface{}) string {
 	case *string:
 		return *v
 	case []byte:
-		return Bytes2String(v)
+		return string(v)
 	case *[]byte:
-		return Bytes2String(*v)
+		return string(*v)
 	case [][]byte:
-		return Bytes2String(bytes.Join(v, []byte{}))
+		return string(bytes.Join(v, []byte{}))
 	case []string:
 		return strings.Join(v, "")
 	case *[]string:
@@ -504,11 +504,11 @@ func Float32(s interface{}) float32 {
 	case float64:
 		return float32(v)
 	case string:
-		f32, _ := strconv.ParseFloat(v, 32)
+		f32, _ := strconv.ParseFloat(strings.Replace(v, ",", ".", -1), 32)
 		return float32(f32)
 	}
 
-	f32, _ := strconv.ParseFloat(String(s), 32)
+	f32, _ := strconv.ParseFloat(strings.Replace(String(s), ",", ".", -1), 32)
 	return float32(f32)
 }
 
@@ -541,11 +541,11 @@ func Float64(s interface{}) float64 {
 		return float64(v)
 
 	case string:
-		f64, _ := strconv.ParseFloat(v, 64)
+		f64, _ := strconv.ParseFloat(strings.Replace(v, ",", ".", -1), 64)
 		return float64(f64)
 	}
 
-	f64, _ := strconv.ParseFloat(String(s), 64)
+	f64, _ := strconv.ParseFloat(strings.Replace(String(s), ",", ".", -1), 64)
 	return float64(f64)
 }
 
