@@ -1,5 +1,6 @@
-# go-types
-Golang library for safe `interface{} to base types` convertion.
+# THIS PROJECT IS DEPRECATED
+*This project is not maintained anymore!*
+For new version see https://github.com/night-codes/conv
 
 ## Install
 
